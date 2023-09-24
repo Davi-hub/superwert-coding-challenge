@@ -1,0 +1,34 @@
+<div class="container">
+    <form>
+        <mat-form-field>
+            <mat-label>Search by name</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input type="text" matInput #searchByNameInput>
+        </mat-form-field>
+        <button 
+            mat-raised-button 
+            color="primary" 
+            class="form-button" 
+            (click)="onByName(searchByNameInput.value)"
+            type="button"
+        >
+            Search
+        </button>
+    </form>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <ul>
+        <li *ngFor="let person of people">
+            <mat-card class="card" (click)="openDialog(person)">
+                <mat-card-header>
+                    <mat-card-title>{{person.name}}</mat-card-title>
+                </mat-card-header>
+                <div class="card-content">
+                    <img [src]="person.imgSrc" [alt]="'Photo of ' + person.name" class="person-pic">
+                </div>
+            </mat-card>
+        </li>
+    </ul>
+    <mat-paginator *ngIf="!isLoading" (page)="handlePageEvent($event)" [length]="count" pageSize="10" hidePageSize="true" [pageIndex]="currentPageIndex"
+        aria-label="Select page">
+    </mat-paginator>
+</div>

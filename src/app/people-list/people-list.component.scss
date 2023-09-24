@@ -1,0 +1,59 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: white;
+    align-items: center;
+}
+
+mat-form-field {
+    margin: 16px 0 0 0;
+    padding: 0;
+}
+
+.form-button {
+    background-color: white;
+    width: 80px;
+    height: 56px;
+    margin-left: 10px;
+}
+
+ul {
+    display: flex;
+    flex-wrap: wrap;    
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+    width: fit-content;
+    margin: auto;
+}
+
+.card {
+    margin: 16px;
+    width: 250px;
+}
+
+mat-card-subtitle {
+    margin-bottom: 16px;
+}
+
+.card-content {
+    display: flex;
+}
+
+.person-pic {
+    width: 240px;
+    height: auto;
+    margin: 5px;
+}
+
+mat-spinner {
+    margin: 16px auto;
+}

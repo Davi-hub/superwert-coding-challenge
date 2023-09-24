@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{person.name}}</h2>
+<mat-dialog-content class="mat-typography">
+    <div>Birth year: {{person.birthYear}}</div>
+    <div>Height: {{person.height}} cm</div>
+    <div>Mass: {{person.mass}} kg</div>
+    <div>Homeworld:</div>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <div *ngIf="isNotOk && !isLoading">
+      Sorry, the data could not be loaded.
+    </div>
+    <div *ngIf="!isNotOk && !isLoading" class="homeworld">
+      <div [style]="'margin-left: 0.25rem; font-size: 0.9rem'">
+        <div>Name: {{name}}</div>
+        <div>Terrain: {{terrain}}</div>
+        <div>Climate: {{climate}}</div>
+      </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

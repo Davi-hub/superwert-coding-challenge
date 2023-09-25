@@ -3,17 +3,29 @@
     <div>Birth year: {{person.birthYear}}</div>
     <div>Height: {{person.height}} cm</div>
     <div>Mass: {{person.mass}} kg</div>
-    <div>Homeworld:</div>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <div *ngIf="isNotOk && !isLoading">
+    <div [style]="'margin: 0.5rem 0 0 0'">Homeworld:</div>
+    <mat-spinner *ngIf="isHwLoading"></mat-spinner>
+    <div *ngIf="isHwNotOk && !isHwLoading">
       Sorry, the data could not be loaded.
     </div>
-    <div *ngIf="!isNotOk && !isLoading" class="homeworld">
+    <div *ngIf="!isHwNotOk && !isHwLoading">
       <div [style]="'margin-left: 0.25rem; font-size: 0.9rem'">
-        <div>Name: {{name}}</div>
+        <div>Name: {{homeWorldName}}</div>
         <div>Terrain: {{terrain}}</div>
         <div>Climate: {{climate}}</div>
       </div>
+    </div>
+    <div [style]="'margin: 0.5rem 0 0 0'">Films:</div>
+    <mat-spinner *ngIf="isFilmsLoading" mode="determinate" [value]="spinnerValue"></mat-spinner>
+    <div *ngIf="!isFilmsNotOk && !isFilmsLoading">
+      <ul [style]="'font-size: 0.9rem; padding: 0; list-style: none; margin: 0 0 1rem 0.25rem'">
+        <li *ngFor="let title of filmTitles">{{title}}</li>
+      </ul>
+      <div *ngIf="filmTitles.length==0">No film</div>
+      <div *ngIf=""></div>
+    </div>
+    <div *ngIf="isFilmsNotOk && !isFilmsLoading" [style]="'color: red'">
+      Something went wrong!
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

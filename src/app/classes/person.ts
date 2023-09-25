@@ -3,9 +3,8 @@ export class Person {
     birthYear: string = '';
     height: string = '';
     mass: string = '';
+    films: string[] = [];
     homeworld: string = '';
 
-    constructor(public name: string) {
-        this.imgSrc = 'https://picsum.photos/750/600';
-    }
+    constructor(public name: string) { }
 }

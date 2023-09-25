@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Person } from '../classes/person';
 import { MatDialog } from '@angular/material/dialog';
 import { PersonDialogComponent } from '../person-dialog/person-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
+import { Subscription } from 'rxjs';
+import { Film } from '../interfaces/film';
+import { Planet } from '../interfaces/planet';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-people-list',
@@ -12,14 +16,28 @@ import { PageEvent } from '@angular/material/paginator';
 })
 
 
-export class PeopleListComponent implements OnInit {
-  count!: number;
+export class PeopleListComponent implements OnInit, OnDestroy {
   people: Person[] = [];
+  count!: number;
   pageIndex: number = 0;
-  isLoading: boolean = true;
   currentPageIndex: number = 0;
+
+  isLoading: boolean = true;
+  isOptionsReady: boolean = false;
+
+  planetOptions: Planet[] = [];
+  filmOptions: Film[] = [];
+  
   previousUrl: string | null = null;
   nextUrl: string | null = null;
+
+  getPeopleSubscription!: Subscription;
+  basicGetSubscription!: Subscription;
+
+  selectedFilm: string = '';
+  selectedPlanet: string = '';
+
+  subsArray: Subscription[] =[];
 
   constructor(
     private apiService: ApiService,
@@ -27,9 +45,31 @@ export class PeopleListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.apiService.getPeople(1).subscribe((res: any) => {
+    this.setOptions();
+    this.getPeopleSubscription = this.apiService.getPeople(1).subscribe((res: any) => {
       this.setList(res);
+    });
+    this.apiService.planetsAndFilmsSubject.subscribe((res: any) => {
+      if (res.planets && res.films) {
+        this.planetOptions = res.planets;
+        this.filmOptions = res.films;
+        this.isOptionsReady = true;
+      }
     })
+  }
+
+  ngOnDestroy(): void {
+    if (this.getPeopleSubscription) {
+      this.getPeopleSubscription.unsubscribe();
+    }
+
+    if (this.basicGetSubscription) {
+      this.basicGetSubscription.unsubscribe();
+    }
+
+    if (this.subsArray) {
+      this.subsArray.every((subs) => subs.unsubscribe());      
+    }
   }
 
   setList(res: any) {
@@ -69,8 +109,31 @@ export class PeopleListComponent implements OnInit {
         person.homeworld = "no data";
       }
 
+      if (personFromRes.films) {
+        person.films = personFromRes.films;
+      }
+
+      let subscription = new Subscription();
+      subscription = this.apiService.getPersonImg(person.name).subscribe((res: any) => {
+        person.imgSrc = res.src;
+      },(error) => {
+        console.log(error);
+        person.imgSrc = 'https://picsum.photos/240/240';
+      });
+
+      this.subsArray.push(subscription);
+
       this.people.push(person);
     }
+  }
+
+  onByName(byName: string) {
+    this.currentPageIndex = 0;
+    this.people = [];
+    this.isLoading = true;
+    this.apiService.searchPeopleByName(byName).subscribe((res: any) => {
+      this.setList(res);
+    })
   }
 
   openDialog(person: Person) {
@@ -95,7 +158,7 @@ export class PeopleListComponent implements OnInit {
     }
 
     if (prevOrNext != null) {
-      this.apiService.basicGet(prevOrNext).subscribe((res: any) => {
+      this.basicGetSubscription = this.apiService.basicGet(prevOrNext).subscribe((res: any) => {
         this.setList(res)
         this.isLoading = false;
       });
@@ -105,12 +168,16 @@ export class PeopleListComponent implements OnInit {
     }
   }
 
-  onByName(byName: string) {
-    this.currentPageIndex = 0;
-    this.people = [];
-    this.isLoading = true;
-    this.apiService.searchPeopleByName(byName).subscribe((res: any) => {
-      this.setList(res);
-    })
+  setOptions(){
+    this.apiService.getAllPlanets();
+    this.apiService.getAllFilms();
   }
+
+  onPlanetOptChanged(event: MatSelectChange) { 
+    this.selectedPlanet = event.value;
+  }
+
+  onFilmOptChanged(event: MatSelectChange) { 
+    this.selectedFilm = event.value;
+  };
 }

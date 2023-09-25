@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Film } from '../interfaces/film';
 import { Planet } from '../interfaces/planet';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private baseURL: string = 'https://swapi.dev/api/';
+  private apiUrl: string = environment.apiUrl;
   planets: Planet[] = [];
   films: Film[] = [];
   planetsPageCounter: number = 1;

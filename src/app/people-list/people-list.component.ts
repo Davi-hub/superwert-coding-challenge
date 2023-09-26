@@ -79,40 +79,40 @@ export class PeopleListComponent implements OnInit, OnDestroy {
     this.setPeople(res.results);
     this.isLoading = false;
   }
-
+  
   setPeople(listOfPeople: any[]): void {
     for (let i = 0; i < listOfPeople.length; i++) {
       const personFromRes = listOfPeople[i];
       const person = new Person(personFromRes.name);
-
+      
       if (personFromRes.birth_year) {
         person.birthYear = personFromRes.birth_year;
       } else {
         person.birthYear = "no data";
       }
-
+      
       if (personFromRes.height) {
         person.height = personFromRes.height;
       } else {
         person.height = "no data";
       }
-
+      
       if (personFromRes.mass) {
         person.mass = personFromRes.mass;
       } else {
         person.mass = "no data";
       }
-
+      
       if (personFromRes.homeworld) {
         person.homeworld = personFromRes.homeworld;
       } else {
         person.homeworld = "no data";
       }
-
+      
       if (personFromRes.films) {
         person.films = personFromRes.films;
       }
-
+      
       let subscription = new Subscription();
       subscription = this.apiService.getPersonImg(person.name).subscribe((res: any) => {
         person.imgSrc = res.src;
@@ -120,13 +120,15 @@ export class PeopleListComponent implements OnInit, OnDestroy {
         console.log(error);
         person.imgSrc = 'https://picsum.photos/240/240';
       });
-
+      
       this.subsArray.push(subscription);
 
       this.people.push(person);
+      this.selectedFilm = "";
+      this.selectedPlanet = "";
     }
   }
-
+  
   onByName(byName: string) {
     this.currentPageIndex = 0;
     this.people = [];

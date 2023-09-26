@@ -11,7 +11,7 @@
       <mat-spinner *ngIf="!isOptionsReady"></mat-spinner>
       <mat-form-field *ngIf="isOptionsReady">
         <mat-label>Planets</mat-label>
-        <mat-select (selectionChange)="onPlanetOptChanged($event)">
+        <mat-select (selectionChange)="onPlanetOptChanged($event)" [(ngModel)]="selectedPlanet">
           <mat-option [value]="">
             All
           </mat-option>
@@ -22,7 +22,7 @@
       </mat-form-field>
       <mat-form-field *ngIf="isOptionsReady">
         <mat-label>Films</mat-label>
-        <mat-select (selectionChange)="onFilmOptChanged($event)">
+        <mat-select (selectionChange)="onFilmOptChanged($event)" [(ngModel)]="selectedFilm">
           <mat-option [value]="">
             All
           </mat-option>

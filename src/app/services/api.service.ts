@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Film } from '../interfaces/film';
@@ -71,6 +71,10 @@ export class ApiService {
     const param = new URLSearchParams({
       'q': name 
     })
-    return this.http.get('http://localhost:3000/get-image?'+param.toString());
+    return this.http.get(this.apiUrl + 'get-image?' + param.toString());
+  }
+
+  getTest() {
+    this.http.get(this.apiUrl + 'test').subscribe((res: any) => alert(res.message));
   }
 }
